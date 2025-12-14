@@ -15,7 +15,7 @@
       "bluetooth"
     ],
     "imagen": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
-    "rating": 4.8,
+    "rating": 3.8,
     "reviews": 2847,
     "stock": true
   },
@@ -60,7 +60,7 @@
     "categoria": "Wearables",
     "tags": ["smartwatch", "apple", "fitness", "health", "gps"],
     "imagen": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
-    "rating": 4.9,
+    "rating": 3.2,
     "reviews": 8765,
     "stock": true
   },
@@ -398,7 +398,7 @@
     "categoria": "Consolas",
     "tags": ["consola", "nintendo", "switch", "portable", "oled"],
     "imagen": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=800&q=80",
-    "rating": 4.7,
+    "rating": 3.7,
     "reviews": 8765,
     "stock": true
   },
