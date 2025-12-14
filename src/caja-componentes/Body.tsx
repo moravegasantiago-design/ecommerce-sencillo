@@ -1,5 +1,6 @@
 import { ShoppingCart, Heart, Star } from "lucide-react";
 import type { ReactNode } from "react";
+import GetDiccinary from "@/utils/Diccionary/GetDiccionary";
 type BodyProps = {
   Title: ReactNode;
   Nav: ReactNode;
@@ -23,16 +24,20 @@ const Body = (props: BodyProps) => {
   );
 };
 
-
-export const Title = () => {
-
+type TitleProps = {
+    option? : string;
+}
+export const Title = (props : TitleProps) => {
+    const {option} = props;
+    const Key = option || "Preterminate";
+    const ObjHeader = GetDiccinary(Key);
   return (
     <>
       <h2 className="text-3xl font-bold text-gray-900 mb-2">
-        Productos Destacados
+        {ObjHeader.title}
       </h2>
       <p className="text-gray-600">
-        Descubre nuestra selección de productos premium
+        {ObjHeader.description}
       </p>
     </>
   );

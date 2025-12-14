@@ -1,6 +1,12 @@
 import { ShoppingCart, Heart, Search, Menu, User } from "lucide-react";
-
-const Header = () => {
+import type { ReactNode } from "react";
+type HeaderProps = {
+  inputDesklop : ReactNode;
+  inputMovil : ReactNode;
+  Buttons : ReactNode;
+}
+const Header = (props: HeaderProps) => {
+  const {inputDesklop, inputMovil, Buttons} = props;
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,13 +18,12 @@ const Header = () => {
             <h1 className="text-2xl font-bold text-gray-900">TechShop</h1>
           </div>
 
-          <div className="hidden md:flex flex-1 max-w-md mx-8"></div>
-          {/* Icons*/}
-          <div className="flex items-center gap-2"></div>
+          <div className="hidden md:flex flex-1 max-w-md mx-8">{inputDesklop}</div>
+
+          <div className="flex items-center gap-2">{Buttons}</div>
         </div>
 
-        {/* Search móvil */}
-        <div className="md:hidden pb-4"></div>
+        <div className="md:hidden pb-4">{inputMovil}</div>
       </div>
     </>
   );
