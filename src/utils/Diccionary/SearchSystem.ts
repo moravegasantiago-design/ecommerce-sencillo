@@ -1,19 +1,19 @@
 import type { ProductType } from "@/App";
-import type { SistemSearchFn } from "@/caja-componentes/Header";
+import type { SystemSearchFn } from "@/caja-componentes/Header";
 import type { Dispatch, SetStateAction } from "react";
 type SuggestionProps = {
   event: string;
   SetListSuggestion: Dispatch<SetStateAction<[string, number][]>>;
   SetSuggestionInput: Dispatch<SetStateAction<boolean>>;
-  SistemSearch: SistemSearchFn;
+  SystemSearch: SystemSearchFn;
   product: ProductType[];
 };
-export const SistemOfSuggestion = (props: SuggestionProps) => {
+export const SystemOfSuggestion = (props: SuggestionProps) => {
   const {
     event,
     SetListSuggestion,
     SetSuggestionInput,
-    SistemSearch,
+    SystemSearch,
     product,
   } = props;
   if (!event.trim()) {
@@ -21,7 +21,7 @@ export const SistemOfSuggestion = (props: SuggestionProps) => {
     SetSuggestionInput(false);
     return;
   }
-  const Filter = SistemSearch({ eventClick: event, array: product });
+  const Filter = SystemSearch({ eventClick: event, array: product });
   SetListSuggestion(Filter);
   SetSuggestionInput(Filter.length ? true : false);
 };
@@ -33,7 +33,7 @@ type searchProps = {
   InputValue: string;
   SetSuggestionInput: Dispatch<SetStateAction<boolean>>;
 };
-export const SearchSistem = (props: searchProps) => {
+export const SearchSystem = (props: searchProps) => {
   const {
     SetOption,
     SetProductFilter,

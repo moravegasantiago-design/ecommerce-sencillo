@@ -11,9 +11,9 @@ import CartSlider, {
   CardHeaderCart,
   CardItemsCart,
 } from "./CardSlider";
-import { SearchSistem, SistemOfSuggestion } from "@/utils/Diccionary/SearchSistem";
+import { SearchSystem, SystemOfSuggestion } from "@/utils/Diccionary/SearchSystem";
 
-export type SistemSearchFn = (props: {
+export type SystemSearchFn = (props: {
   eventClick: string;
   array: ProductType[];
 }) => [string, number][];
@@ -41,7 +41,7 @@ const Header = (props: HeaderProps) => {
   const [suggestionInput, SetSuggestionInput] = useState(false);
   const [LisSuggestion, SetListSuggestion] = useState<[string, number][]>([]);
   
-  const SistemSearch = (props: {
+  const SystemSearch = (props: {
     eventClick: string;
     array: ProductType[];
   }) => {
@@ -70,7 +70,7 @@ const Header = (props: HeaderProps) => {
 
           <div className="hidden md:flex flex-1 max-w-md mx-8">
             <SearchInput
-              SistemSearch={SistemSearch}
+              SystemSearch={SystemSearch}
               product={product}
               SetSuggestionInput={SetSuggestionInput}
               SetListSuggestion={SetListSuggestion}
@@ -88,7 +88,7 @@ const Header = (props: HeaderProps) => {
 
         <div className="md:hidden pb-4">
           <SearchInput
-            SistemSearch={SistemSearch}
+            SystemSearch={SystemSearch}
             product={product}
             SetSuggestionInput={SetSuggestionInput}
             SetListSuggestion={SetListSuggestion}
@@ -112,7 +112,7 @@ const Header = (props: HeaderProps) => {
 };
 
 type SearchProps = {
-  SistemSearch: SistemSearchFn;
+  SystemSearch: SystemSearchFn;
   SetSuggestionInput: Dispatch<SetStateAction<boolean>>;
   product: ProductType[];
   LisSuggestion: [string, number][];
@@ -124,7 +124,7 @@ type SearchProps = {
 
 export const SearchInput = (props: SearchProps) => {
   const {
-    SistemSearch,
+    SystemSearch,
     SetSuggestionInput,
     product,
     SetListSuggestion,
@@ -144,17 +144,17 @@ export const SearchInput = (props: SearchProps) => {
         placeholder="Buscar productos, marcas o categorías..."
         className="w-full pl-10 pr-4 py-3 md:py-2.5 bg-gray-50 md:bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-500 md:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200 md:shadow-sm md:hover:shadow-md"
         onChange={(e) => {
-          SistemOfSuggestion({
+          SystemOfSuggestion({
             event: e.target.value,
             SetListSuggestion: SetListSuggestion,
             SetSuggestionInput: SetSuggestionInput,
-            SistemSearch: SistemSearch,
+            SystemSearch: SystemSearch,
             product: product,
           });
         }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key !== "Enter") return;
-          SearchSistem({
+          SearchSystem({
             InputValue: e.currentTarget.value,
             SetOption: SetOption,
             SetProductFilter: SetProductFilter,
@@ -200,7 +200,7 @@ export const SearchSuggestions = (props: listSuggestion) => {
               className="w-full px-3 md:px-4 py-3 md:py-2.5 active:bg-gray-100 md:hover:bg-gray-50 flex items-center gap-3 transition-colors duration-150 group"
               key={i}
               onClick={() =>
-                SearchSistem({
+                SearchSystem({
                   InputValue: p[0],
                   SetOption: SetOption,
                   SetProductFilter: SetProductFilter,

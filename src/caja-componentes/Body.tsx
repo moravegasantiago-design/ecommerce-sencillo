@@ -13,9 +13,11 @@ const Body = (props: BodyProps) => {
   const { Title, Nav, CardProduct } = props;
   return (
     <>
-      <div className="mb-8 border-b border-gray-200">
-        <div className="flex gap-1 overflow-x-auto pb-px">{Nav}</div>
-      </div>
+      <div className="mb-6 border-b border-gray-200">
+        <nav className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {Nav}
+        </nav>
+    </div>
       <div className="mb-8">{Title}</div>
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {CardProduct}
@@ -54,7 +56,7 @@ export const Nav = (props: NavProps) => {
     <>
       {listCategory.map((p, i) => (
         <button
-          className="px-6 py-3 font-medium text-blue-600 border-b-2 border-blue-600 whitespace-nowrap"
+          className="px-6 py-3 font-semibold text-sm text-blue-600 border-b-2 border-blue-600 whitespace-nowrap transition-all hover:text-blue-700 hover:bg-blue-50/50 focus:outline-none focus:bg-blue-50"
           key={i}
           onClick={() => {
             SetOption(p);
