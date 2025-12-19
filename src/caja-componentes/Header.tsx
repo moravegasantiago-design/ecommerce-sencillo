@@ -1,7 +1,8 @@
-import { ShoppingCart, Heart, Search, Menu, User } from "lucide-react";
+import { ShoppingCart, Search, User } from "lucide-react";
 import {
   useState,
   type Dispatch,
+  type KeyboardEvent,
   type SetStateAction,
 } from "react";
 import { type ProductType } from "@/App";
@@ -24,6 +25,7 @@ type HeaderProps = {
   product: ProductType[];
   SetProductFilter: Dispatch<SetStateAction<ProductType[]>>;
   SetOption: Dispatch<SetStateAction<string>>;
+  SetViewLogin : Dispatch<SetStateAction<boolean>>;
 };
 
 const Header = (props: HeaderProps) => {
@@ -33,6 +35,7 @@ const Header = (props: HeaderProps) => {
     product,
     SetOption,
     SetProductFilter,
+    SetViewLogin
   } = props;
   const [cartEvent, SetCartEvent] = useState(false);
   const [suggestionInput, SetSuggestionInput] = useState(false);
@@ -62,9 +65,6 @@ const Header = (props: HeaderProps) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <button className="lg:hidden p-2 hover:bg-gray-100 rounded-lg">
-              <Menu className="h-6 w-6" />
-            </button>
             <h1 className="text-2xl font-bold text-gray-900">TechShop</h1>
           </div>
 
@@ -82,7 +82,7 @@ const Header = (props: HeaderProps) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <BtnAccion CartShop={CartShop} SetCartEvent={SetCartEvent} />
+            <BtnAccion CartShop={CartShop} SetCartEvent={SetCartEvent} SetViewLogin={SetViewLogin}/>
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export const SearchInput = (props: SearchProps) => {
             product: product,
           });
         }}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key !== "Enter") return;
           SearchSistem({
             InputValue: e.currentTarget.value,
@@ -225,18 +225,13 @@ export const SearchSuggestions = (props: listSuggestion) => {
 type BtnProps = {
   CartShop: ProductType[];
   SetCartEvent: Dispatch<SetStateAction<boolean>>;
+  SetViewLogin : Dispatch<SetStateAction<boolean>>;
 };
 
 export const BtnAccion = (props: BtnProps) => {
-  const { CartShop, SetCartEvent } = props;
+  const { CartShop, SetCartEvent, SetViewLogin } = props;
   return (
     <>
-      <button className="p-2 hover:bg-gray-100 rounded-lg relative">
-        <Heart className="h-6 w-6 text-gray-700" />
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">
-          3
-        </span>
-      </button>
 
       <button
         className="p-2 hover:bg-gray-100 rounded-lg relative"
@@ -252,7 +247,7 @@ export const BtnAccion = (props: BtnProps) => {
         </span>
       </button>
 
-      <button className="p-2 hover:bg-gray-100 rounded-lg">
+      <button className="p-2 hover:bg-gray-100 rounded-lg" onClick={() => SetViewLogin(true)}>
         <User className="h-6 w-6 text-gray-700" />
       </button>
     </>

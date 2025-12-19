@@ -2,6 +2,7 @@ import Header from "./caja-componentes/Header";
 import Body, { Title, Nav, CardProduct } from "./caja-componentes/Body";
 import Footer from "./caja-componentes/Footer";
 import { useEffect, useState } from "react";
+import Login from "./caja-componentes/login";
 
 export type ProductType = {
   ref: string;
@@ -24,7 +25,7 @@ const App = () => {
   const [product, SetProduct] = useState<ProductType[]>([]);
   const [option, SetOption] = useState("");
   const [cartShop, SetCartShop] = useState<ProductType[]>([]);
-
+  const [viewLogin, SetViewLogin] = useState<boolean>(false);
   useEffect(() => {
     const dataFetch = async () => {
       try {
@@ -47,8 +48,9 @@ const App = () => {
         product={product}
         SetProductFilter={SetProductFilter}
         SetOption={SetOption}
+        SetViewLogin={SetViewLogin}
       />
-
+      {viewLogin && <Login SetViewLogin={SetViewLogin} />}
       <Body
         Title={<Title option={option} />}
         Nav={
