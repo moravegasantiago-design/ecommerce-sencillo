@@ -1,5 +1,11 @@
-import { UserPlus, X } from "lucide-react";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { addObj, RegisterMessage } from "@/utils/Diccionary/loginSystem";
+import { AlertCircle, UserPlus, X } from "lucide-react";
+import {
+  useState,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+} from "react";
 
 type UserProps = {
   SetViewLogin: Dispatch<SetStateAction<boolean>>;
@@ -46,7 +52,7 @@ const HeaderLogin = (props: { systemLogin: boolean }) => {
   return (
     <div
       className={`bg-gradient-to-r from-indigo-600 to-purple-600 text-center transition-all duration-300 ${
-        systemLogin ? "px-6 py-1 sm:px-7 sm:py-2" : "px-6 py-5 sm:px-7 sm:py-6"
+        systemLogin ? "px-6 py-1 sm:px-7 sm:py-1" : "px-6 py-5 sm:px-7 sm:py-6"
       }`}
     >
       <div
@@ -62,15 +68,6 @@ const HeaderLogin = (props: { systemLogin: boolean }) => {
           }`}
         />
       </div>
-      <h2
-        className={`font-bold text-white transition-all duration-300 ${
-          systemLogin
-            ? "text-base sm:text-lg mb-0.5"
-            : "text-lg sm:text-xl mb-1"
-        }`}
-      >
-        {systemLogin ? "¿No tienes una cuenta?" : "Bienvenido"}
-      </h2>
       <p
         className={`text-indigo-100 font-medium transition-all duration-300 ${
           systemLogin ? "text-xs" : "text-xs sm:text-sm"
@@ -83,8 +80,30 @@ const HeaderLogin = (props: { systemLogin: boolean }) => {
 };
 
 const FromLogin = () => {
+  const [submitLogin, SetSubmitLogin] = useState<FromProps>({
+    email: "",
+    password: "",
+    condicional: false,
+  });
+  const [alertInput, SetAlertInput] = useState<boolean>(false);
+  const [conditions, SetConditions] = useState<boolean>(false);
+  //   const [passwordFalse, SetPasswordFalse] = useState<boolean>(false);
   return (
-    <form className="space-y-2.5 sm:space-y-3">
+    <form
+      className="space-y-2.5 sm:space-y-3"
+      onSubmit={(e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        RegisterMessage({
+          obj: submitLogin,
+          SetAlertInput: SetAlertInput,
+          SetConditions: SetConditions,
+          alertInput: alertInput,
+          conditions: conditions,
+        });
+        console.log(submitLogin);
+        if (alertInput || conditions) return;
+      }}
+    >
       <div>
         <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
           Correo electrónico
@@ -92,7 +111,12 @@ const FromLogin = () => {
         <input
           type="email"
           placeholder="tu@email.com"
+          name="email"
           className="w-full px-3 py-2 sm:px-3.5 sm:py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+          value={submitLogin.email}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitLogin: SetSubmitLogin })
+          }
         />
       </div>
 
@@ -102,29 +126,41 @@ const FromLogin = () => {
         </label>
         <input
           type="password"
+          name="password"
           placeholder="••••••••"
           className="w-full px-3 py-2 sm:px-3.5 sm:py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+          value={submitLogin.password}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitLogin: SetSubmitLogin })
+          }
         />
       </div>
-
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-0 pt-1">
-        <label className="flex items-center gap-2 cursor-pointer group">
-          <input
-            type="checkbox"
-            className="w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          />
-          <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
-            Recordarme
-          </span>
-        </label>
-        <button
-          type="button"
-          className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors text-left sm:text-right"
-        >
-          ¿Olvidaste tu contraseña?
-        </button>
-      </div>
-
+      {(alertInput || conditions) && (
+        <span className="flex items-center gap-1.5 text-sm text-red-600 font-medium">
+          <AlertCircle className="w-4 h-4" />
+          {alertInput && "Faltan credenciales"}
+          {conditions && "Acepta Terminos y condiciones"}
+        </span>
+      )}
+      <label className="flex items-start gap-2 cursor-pointer group pt-1">
+        <input
+          type="checkbox"
+          name="condicional"
+          className="w-3.5 h-3.5 mt-0.5 rounded border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitLogin: SetSubmitLogin })
+          }
+        />
+        <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
+          Acepto los{" "}
+          <button
+            type="button"
+            className="text-indigo-600 hover:text-indigo-700 font-medium"
+          >
+            términos y condiciones
+          </button>
+        </span>
+      </label>
       <button
         type="submit"
         className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2 sm:py-2.5 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 text-sm mt-1"
@@ -160,31 +196,85 @@ const FooterLogin = (props: FooterProps) => {
     </div>
   );
 };
-
+export type FromProps = {
+  name?: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  condicional: boolean;
+};
 export const FormRegister = () => {
+  const [submitRegister, SetSubmitRegister] = useState<FromProps>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    condicional: false,
+  });
+  const [alertInput, SetAlertInput] = useState<boolean>(false);
+  const [conditions, SetConditions] = useState<boolean>(false);
+  const [passwordConfirm, SetPasswordConfirm] = useState<boolean>(false);
   const inputClass =
     "w-full px-3 py-2 sm:px-3.5 sm:py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200";
 
   const labelClass = "block text-xs sm:text-sm font-medium text-gray-700 mb-1";
 
   return (
-    <form className="space-y-2.5 sm:space-y-3">
+    <form
+      className="space-y-2.5 sm:space-y-3"
+      onSubmit={(e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        RegisterMessage({
+          obj: submitRegister,
+          SetAlertInput: SetAlertInput,
+          SetConditions: SetConditions,
+          SetPasswordConfirm: SetPasswordConfirm,
+          alertInput: alertInput,
+          conditions: conditions,
+          passwordConfirm: passwordConfirm,
+        });
+        if (alertInput || conditions || passwordConfirm) return;
+      }}
+    >
       <div>
         <label className={labelClass}>Nombre completo</label>
-        <input type="text" placeholder="Juan Pérez" className={inputClass} />
+        <input
+          type="text"
+          name="name"
+          placeholder="Juan Pérez"
+          className={inputClass}
+          value={submitRegister.name}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitRegister: SetSubmitRegister })
+          }
+        />
       </div>
 
       <div>
         <label className={labelClass}>Correo electrónico</label>
-        <input type="email" placeholder="tu@email.com" className={inputClass} />
+        <input
+          type="email"
+          name="email"
+          placeholder="tu@email.com"
+          className={inputClass}
+          value={submitRegister.email}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitRegister: SetSubmitRegister })
+          }
+        />
       </div>
 
       <div>
         <label className={labelClass}>Contraseña</label>
         <input
           type="password"
+          name="password"
           placeholder="Mínimo 8 caracteres"
           className={inputClass}
+          value={submitRegister.password}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitRegister: SetSubmitRegister })
+          }
         />
       </div>
 
@@ -192,14 +282,23 @@ export const FormRegister = () => {
         <label className={labelClass}>Confirmar contraseña</label>
         <input
           type="password"
+          name="confirmPassword"
           placeholder="Repite tu contraseña"
           className={inputClass}
+          value={submitRegister.confirmPassword}
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitRegister: SetSubmitRegister })
+          }
         />
       </div>
 
       <label className="flex items-start gap-2 cursor-pointer group pt-1">
         <input
           type="checkbox"
+          name="condicional"
+          onChange={(event) =>
+            addObj({ e: event, SetSubmitRegister: SetSubmitRegister })
+          }
           className="w-3.5 h-3.5 mt-0.5 rounded border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 cursor-pointer"
         />
         <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
@@ -212,6 +311,14 @@ export const FormRegister = () => {
           </button>
         </span>
       </label>
+      {(alertInput || conditions || passwordConfirm) && (
+        <span className="flex items-center gap-1.5 text-sm text-red-600 font-medium">
+          <AlertCircle className="w-4 h-4" />
+          {alertInput && "Faltan credenciales"}
+          {conditions && "Acepta los terminos"}
+          {passwordConfirm && "Las contraseñas no coinciden"}
+        </span>
+      )}
 
       <button
         type="submit"
