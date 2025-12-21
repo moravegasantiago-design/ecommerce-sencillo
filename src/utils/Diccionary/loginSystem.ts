@@ -36,16 +36,29 @@ export const RegisterMessage = (props: messageProps) => {
     alertInput,
     passwordConfirm,
   } = props;
+  let conditionChecker = false;
   if (conditions || alertInput || passwordConfirm) {
     SetAlertInput(false);
     if (SetPasswordConfirm) SetPasswordConfirm(false);
     SetConditions(false);
   }
   for (const values of Object.values(obj)) {
-    if (values === "") return SetAlertInput(true);
-    if (!values) return SetConditions(true);
+    if (values === "") {
+      conditionChecker = true;
+      SetAlertInput(true);
+      return conditionChecker;
+    }
+    if (!values) {
+      conditionChecker = true;
+      SetConditions(true);
+      return conditionChecker;
+    }
   }
   if (SetPasswordConfirm) {
-    if (obj.password !== obj.confirmPassword) return SetPasswordConfirm(true);
+    if (obj.password !== obj.confirmPassword) {
+      conditionChecker = true;
+      SetPasswordConfirm(true);
+      return conditionChecker;
+    }
   }
 };

@@ -34,7 +34,11 @@ const Login = (props: UserProps) => {
 
           <HeaderLogin systemLogin={systemLogin} />
           <div className="px-6 py-3 sm:px-7 sm:py-3">
-            {systemLogin ? <FormRegister /> : <FromLogin />}
+            {systemLogin ? (
+              <FormRegister SetSystemLogin={SetSystemLogin} />
+            ) : (
+              <FromLogin />
+            )}
           </div>
 
           <FooterLogin
@@ -87,21 +91,35 @@ const FromLogin = () => {
   });
   const [alertInput, SetAlertInput] = useState<boolean>(false);
   const [conditions, SetConditions] = useState<boolean>(false);
-  //   const [passwordFalse, SetPasswordFalse] = useState<boolean>(false);
+  const [passwordStatus, SetPasswordStatus] = useState<number>(0);
   return (
     <form
       className="space-y-2.5 sm:space-y-3"
-      onSubmit={(e: FormEvent<HTMLFormElement>) => {
+      onSubmit={async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        RegisterMessage({
+        const checker = RegisterMessage({
           obj: submitLogin,
           SetAlertInput: SetAlertInput,
           SetConditions: SetConditions,
           alertInput: alertInput,
           conditions: conditions,
         });
-        console.log(submitLogin);
-        if (alertInput || conditions) return;
+        if (checker) return;
+        try {
+          const res = await fetch("http://localhost:3000/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: submitLogin.email,
+              password: submitLogin.password,
+            }),
+          });
+          const status = await res.json();
+          if (status.success) alert("Logueado correcto");
+          SetPasswordStatus(res.status);
+        } catch (err) {
+          console.error(err);
+        }
       }}
     >
       <div>
@@ -135,11 +153,12 @@ const FromLogin = () => {
           }
         />
       </div>
-      {(alertInput || conditions) && (
+      {(alertInput || conditions || passwordStatus === 401) && (
         <span className="flex items-center gap-1.5 text-sm text-red-600 font-medium">
           <AlertCircle className="w-4 h-4" />
           {alertInput && "Faltan credenciales"}
           {conditions && "Acepta Terminos y condiciones"}
+          {passwordStatus === 401 && "Credenciales incorrectas"}
         </span>
       )}
       <label className="flex items-start gap-2 cursor-pointer group pt-1">
@@ -203,7 +222,10 @@ export type FromProps = {
   confirmPassword?: string;
   condicional: boolean;
 };
-export const FormRegister = () => {
+export const FormRegister = (props: {
+  SetSystemLogin: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const { SetSystemLogin } = props;
   const [submitRegister, SetSubmitRegister] = useState<FromProps>({
     name: "",
     email: "",
@@ -214,6 +236,7 @@ export const FormRegister = () => {
   const [alertInput, SetAlertInput] = useState<boolean>(false);
   const [conditions, SetConditions] = useState<boolean>(false);
   const [passwordConfirm, SetPasswordConfirm] = useState<boolean>(false);
+  const [accountCreated, SetAccountCreated] = useState<number>(0);
   const inputClass =
     "w-full px-3 py-2 sm:px-3.5 sm:py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200";
 
@@ -222,9 +245,9 @@ export const FormRegister = () => {
   return (
     <form
       className="space-y-2.5 sm:space-y-3"
-      onSubmit={(e: FormEvent<HTMLFormElement>) => {
+      onSubmit={async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        RegisterMessage({
+        const checker = RegisterMessage({
           obj: submitRegister,
           SetAlertInput: SetAlertInput,
           SetConditions: SetConditions,
@@ -233,7 +256,20 @@ export const FormRegister = () => {
           conditions: conditions,
           passwordConfirm: passwordConfirm,
         });
-        if (alertInput || conditions || passwordConfirm) return;
+        if (checker) return;
+        const res = await fetch("http://localhost:3000/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: submitRegister.name,
+            email: submitRegister.email,
+            password: submitRegister.password,
+          }),
+        });
+        const req = await res.json();
+        const status = res.status;
+        if (req.success) SetSystemLogin(false);
+        SetAccountCreated(status);
       }}
     >
       <div>
@@ -311,12 +347,16 @@ export const FormRegister = () => {
           </button>
         </span>
       </label>
-      {(alertInput || conditions || passwordConfirm) && (
+      {(alertInput ||
+        conditions ||
+        passwordConfirm ||
+        accountCreated === 401) && (
         <span className="flex items-center gap-1.5 text-sm text-red-600 font-medium">
           <AlertCircle className="w-4 h-4" />
           {alertInput && "Faltan credenciales"}
           {conditions && "Acepta los terminos"}
           {passwordConfirm && "Las contraseñas no coinciden"}
+          {accountCreated === 401 && "Email ya existente"}
         </span>
       )}
 

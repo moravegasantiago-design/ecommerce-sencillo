@@ -11,7 +11,7 @@ const CartSlider = (props: CardSliderProps) => {
   const { CardHeaderCart, CardFooterCart, CardItemsCart, CartEvent } = props;
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl  ${
+      className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl${
         CartEvent ? "transform translate-x-0" : "transform translate-x-full"
       } transition-transform duration-300 ease-in-out z-50`}
     >
