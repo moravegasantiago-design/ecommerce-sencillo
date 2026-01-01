@@ -124,7 +124,9 @@ export const CardProduct = (props: ProductProps) => {
           </div>
 
           <div className="flex items-baseline gap-1.5 mb-2.5">
-            <span className="text-lg font-bold text-gray-900">{(p.precio).toLocaleString()}</span>
+            <span className="text-lg font-bold text-gray-900">
+              {p.precio.toLocaleString()}
+            </span>
             <span
               className={`text-[10px] text-gray-400 line-through ${
                 p.precioOriginal ? "block" : "hidden"
@@ -134,8 +136,16 @@ export const CardProduct = (props: ProductProps) => {
             </span>
           </div>
 
-          <button className="w-full h-8 bg-gray-900 text-white rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-1.5" 
-          onClick={() => {AddCart({product : p, CartShop : cartShop, SetCartShop: SetCartShop})}}>
+          <button
+            className="w-full h-8 bg-gray-900 text-white rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-1.5"
+            onClick={() => {
+              AddCart({
+                product: p,
+                CartShop: cartShop,
+                SetCartShop: SetCartShop,
+              });
+            }}
+          >
             <ShoppingCart className="h-3.5 w-3.5" />
             Agregar
           </button>

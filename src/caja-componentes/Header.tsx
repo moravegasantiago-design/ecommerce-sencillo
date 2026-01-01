@@ -40,7 +40,7 @@ const Header = (props: HeaderProps) => {
   const [cartEvent, SetCartEvent] = useState(false);
   const [suggestionInput, SetSuggestionInput] = useState(false);
   const [LisSuggestion, SetListSuggestion] = useState<[string, number][]>([]);
-  
+  const cortList = LisSuggestion.filter((_, i) => i < 10);
   const SystemSearch = (props: {
     eventClick: string;
     array: ProductType[];
@@ -74,7 +74,7 @@ const Header = (props: HeaderProps) => {
               product={product}
               SetSuggestionInput={SetSuggestionInput}
               SetListSuggestion={SetListSuggestion}
-              LisSuggestion={LisSuggestion}
+              LisSuggestion={cortList}
               suggestionInput={suggestionInput}
               SetOption={SetOption}
               SetProductFilter={SetProductFilter}
@@ -82,7 +82,11 @@ const Header = (props: HeaderProps) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <BtnAccion CartShop={CartShop} SetCartEvent={SetCartEvent} SetViewLogin={SetViewLogin}/>
+            <BtnAccion
+              CartShop={CartShop}
+              SetCartEvent={SetCartEvent}
+              SetViewLogin={SetViewLogin}
+            />
           </div>
         </div>
 
@@ -92,7 +96,7 @@ const Header = (props: HeaderProps) => {
             product={product}
             SetSuggestionInput={SetSuggestionInput}
             SetListSuggestion={SetListSuggestion}
-            LisSuggestion={LisSuggestion}
+            LisSuggestion={cortList}
             suggestionInput={suggestionInput}
             SetOption={SetOption}
             SetProductFilter={SetProductFilter}
